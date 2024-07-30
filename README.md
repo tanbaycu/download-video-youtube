@@ -82,7 +82,7 @@ With this method, you can easily and quickly install `ffmpeg` on Windows.
 
 ## Disadvantage
 
-- if download playlist, it make happen with lists_format because any video have different format, pls keep link of the videos you like - download each for a better experience
+- if download playlist, it make happen with lists_format because any video have different format, pls keep link of the videos you like - download each for a better experience, or you want download all pls wait for format loading and choose id for you download.
 
 ## Hope
 - i ways for feedback of you with my code, i will hear opinions from you. gook luck
