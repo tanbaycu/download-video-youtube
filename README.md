@@ -80,3 +80,9 @@ If you want to install `ffmpeg` using Chocolatey on Windows, follow these steps:
 With this method, you can easily and quickly install `ffmpeg` on Windows.
 
 
+## Disadvantage
+
+- if download playlist, it make happen with lists_format because any video have different format, pls keep link of the videos you like - download each for a better experience
+
+## Hope
+
