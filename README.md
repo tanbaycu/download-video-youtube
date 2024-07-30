@@ -85,4 +85,4 @@ With this method, you can easily and quickly install `ffmpeg` on Windows.
 - if download playlist, it make happen with lists_format because any video have different format, pls keep link of the videos you like - download each for a better experience
 
 ## Hope
-
+- i ways for feedback of you with my code, i will hear opinions from you. gook luck
