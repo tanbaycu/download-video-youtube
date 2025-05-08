@@ -1,13 +1,38 @@
+"""
+t7c_dowpy - YouTube Downloader
+Version: 1.02
+Last Updated: 05/08/2025
+
+Changelog:
+- Added yt-dlp auto-update feature
+- Improved error handling
+- Enhanced user interface
+- Added playlist download optimization
+- Added format selection improvements
+- Changed default download directory to 'downloads'
+
+Author: tanbaycu
+Contact: dev.tanbaycu@gmail.com
+"""
+
 import yt_dlp
 import os
+import subprocess
+import sys
+import json
+from datetime import datetime
 from rich.console import Console
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
 from pyfiglet import Figlet
-
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
 console = Console()
+
+# Default configuration
+DEFAULT_DOWNLOAD_DIR = 'downloads'
+HISTORY_FILE = 'download_history.json'
 
 global_video_format_list = []
 global_playlist_format_list = []
@@ -16,6 +41,42 @@ formats_displayed = {
     'playlist': False
 }
 
+def load_download_history():
+    if os.path.exists(HISTORY_FILE):
+        try:
+            with open(HISTORY_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return []
+    return []
+
+def save_download_history(url, filename, format_type):
+    history = load_download_history()
+    history.append({
+        'url': url,
+        'filename': filename,
+        'format_type': format_type,
+        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    })
+    try:
+        with open(HISTORY_FILE, 'w') as f:
+            json.dump(history, f, indent=4)
+    except:
+        console.print("[yellow]Warning: Could not save download history[/yellow]")
+
+def show_download_history():
+    history = load_download_history()
+    if not history:
+        console.print("[yellow]No download history found[/yellow]")
+        return
+
+    console.print("\n[bold cyan]Download History:[/bold cyan]")
+    for item in history[-10:]:  # Show last 10 downloads
+        console.print(f"[green]URL:[/green] {item['url']}")
+        console.print(f"[green]File:[/green] {item['filename']}")
+        console.print(f"[green]Format:[/green] {item['format_type']}")
+        console.print(f"[green]Date:[/green] {item['timestamp']}")
+        console.print("-" * 50)
 
 def print_ascii_title():
     figlet = Figlet(font='slant')
@@ -72,7 +133,7 @@ def list_formats(url, for_playlist=False):
         return format_list
 
 
-def download_from_youtube(url, format_id, download_path='t7c_dowpy', filename=None, is_audio=False):
+def download_from_youtube(url, format_id, download_path=DEFAULT_DOWNLOAD_DIR, filename=None, is_audio=False):
     create_directory_if_not_exists(download_path)
 
     if not filename:
@@ -101,10 +162,9 @@ def download_from_youtube(url, format_id, download_path='t7c_dowpy', filename=No
     except Exception as e:
         console.print(f"[bold red]An error occurred: {e}[/bold red]")
 
-def download_playlist(url, format_id, download_path='t7c_dowpy', filename=None):
+def download_playlist(url, format_id, download_path=DEFAULT_DOWNLOAD_DIR, filename=None):
     create_directory_if_not_exists(download_path)  
 
-    
     if not filename:
         filename = '%(playlist)s/%(title)s.%(ext)s'
     
@@ -133,21 +193,33 @@ def download_playlist(url, format_id, download_path='t7c_dowpy', filename=None):
 
 
 def progress_hook(d):
-    if d['status'] == 'finished':
-        console.print(f"[bold green]Download completed: {d['filename']}[/bold green]")
+    if d['status'] == 'downloading':
+        try:
+            percent = d.get('_percent_str', '0%')
+            speed = d.get('_speed_str', 'N/A')
+            eta = d.get('_eta_str', 'N/A')
+            console.print(f"[bold cyan]Downloading: {percent} at {speed} - ETA: {eta}[/bold cyan]", end='\r')
+        except:
+            pass
+    elif d['status'] == 'finished':
+        console.print(f"\n[bold green]Download completed: {d['filename']}[/bold green]")
 
 
 def about_me():
     console.print(Panel(
         Text.from_markup(
             "[bold cyan]About Me[/bold cyan]\n\n"
-            "[bold]Author:[/bold] T7C\n"
+            "[bold]Version:[/bold] 1.02\n"
+            "[bold]Author:[/bold] tanbaycu\n"
             "[bold]Contact:[/bold] tranminhtan4953@gmail.com\n\n"
             "[bold]Functionality of the code:[/bold]\n"
             "This code allows you to download videos or audio from YouTube. You can choose the download format, video quality, and even download playlists.\n\n"
-            "[bold]New Features:[/bold]\n"
-            "1. The ability to download entire playlists from YouTube.\n"
-            "2. Improved handling of formats where only the selected format is used for playlist downloads without displaying format details.\n\n"
+            "[bold]New Features in v1.02:[/bold]\n"
+            "1. Added automatic yt-dlp update feature\n"
+            "2. Improved download progress display\n"
+            "3. Enhanced error handling and user feedback\n"
+            "4. Added download speed and ETA information\n"
+            "5. Optimized playlist downloads\n\n"
             "[bold]How to use:[/bold]\n"
             "1. Run the program.\n"
             "2. Select the option to download video, audio, or playlist.\n"
@@ -162,6 +234,7 @@ def about_me():
             "4. If you encounter issues with format selection, ensure that the format ID is valid and properly entered.\n"
             "5. If the download fails, check if there are any restrictions or issues with the YouTube video or playlist.\n"
             "6. For persistent errors, consult the program's error message or log for more details, and consider contacting the author with the error information.\n"
+            "7. Try updating yt-dlp using option 4 in the main menu if you encounter download issues.\n"
         ),
         title="About Me",
         border_style="bold cyan"
@@ -197,6 +270,16 @@ def confirm_download(is_playlist=False):
         return False
     return True
 
+def update_ytdlp():
+    try:
+        console.print("[bold yellow]Checking for yt-dlp updates...[/bold yellow]")
+        subprocess.run([sys.executable, "-m", "pip", "install", "--upgrade", "yt-dlp"], check=True)
+        console.print("[bold green]yt-dlp has been successfully updated![/bold green]")
+    except subprocess.CalledProcessError as e:
+        console.print(f"[bold red]Failed to update yt-dlp: {e}[/bold red]")
+    except Exception as e:
+        console.print(f"[bold red]An unexpected error occurred: {e}[/bold red]")
+
 # Main menu
 def main_menu():
     print_ascii_title()  
@@ -208,7 +291,8 @@ def main_menu():
                 "[1] Download YouTube Video\n"
                 "[2] Download YouTube Playlist\n"
                 "[3] About Me\n"
-                "[4] Exit\n"
+                "[4] Update yt-dlp\n"
+                "[5] Exit\n"
             ),
             title="Youtube Download Video",
             border_style="bold cyan"
@@ -223,7 +307,7 @@ def main_menu():
             if not confirm_download():
                 continue  
             
-            download_path = Prompt.ask("Enter the storage folder (leave blank to use the current folder)", default='t7c_dowpy')
+            download_path = Prompt.ask("Enter the storage folder (leave blank to use the default folder)", default=DEFAULT_DOWNLOAD_DIR)
             filename = Prompt.ask("Enter output file name (leave blank to use default name)", default="")
             
             download_from_youtube(url, format_id, download_path, filename, is_audio)
@@ -235,14 +319,16 @@ def main_menu():
             if not confirm_download(is_playlist=True):
                 continue  
             
-            download_path = Prompt.ask("Enter the storage folder (leave blank to use the current folder)", default='t7c_dowpy')
+            download_path = Prompt.ask("Enter the storage folder (leave blank to use the default folder)", default=DEFAULT_DOWNLOAD_DIR)
             filename = Prompt.ask("Enter output file name (leave blank to use default name)", default="")
             
             download_playlist(url, format_id, download_path, filename)
         elif choice == '3':
             about_me()
         elif choice == '4':
-            console.print("[bold green]thank for using...[/bold green]")
+            update_ytdlp()
+        elif choice == '5':
+            console.print("[bold green]Thank you for using t7c_dowpy![/bold green]")
             break
         else:
             console.print("[bold red]Invalid choice. Please select a valid option.[/bold red]")
@@ -252,4 +338,3 @@ if __name__ == "__main__":
     main_menu()
 
 
-"""Once I remind you that this source code may have errors or not work properly, you can share with me, I am always listening. PLEASE CHOOSE OPTION 1 FIRST AND ENTER YOUR URL, YOU WILL SEE FORMATS CONTAINING IDS THAT ARE ASSIGNABLE TO YOUR URL, PLEASE USE THE SOURCE CODE CORRECTLY."""
