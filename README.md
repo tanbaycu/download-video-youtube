@@ -63,7 +63,7 @@ The default download directory is set to `downloads/`. You can change this by mo
 
 ## 📝 Changelog
 
-### Version 1.02 (05/08/2025)
+### Version 1.02 (05/05/2025)
 - Added yt-dlp auto-update feature
 - Improved error handling
 - Enhanced user interface
