@@ -1,88 +1,112 @@
-# Download Video Youtube - @T7C
+# 🎥 YouTube Downloader CLI
 
-## Introduction
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Last Updated](https://img.shields.io/badge/last%20updated-05/08/2025-orange)]()
 
-T7C Dowpy is a command-line tool for downloading videos and audio from YouTube. This tool allows you to choose the download format, video quality, and even download YouTube playlists. Built with Python and libraries like `yt-dlp`, `rich`, and `pyfiglet`, T7C Dowpy offers a user-friendly interface.
+A powerful command-line YouTube video and playlist downloader built with Python. This tool provides a beautiful CLI interface for downloading YouTube content with various format options.
 
-## Features
+## ✨ Features
 
-- Download videos or audio from YouTube.
-- Choose download format (mp4, mp3, webm, or video).
-- Select maximum video quality (up to 1080p).
-- Download YouTube playlists.
-- Automatically create a directory for saving downloaded files.
-- User interface with clear and understandable notifications.
+- 📥 Download single videos or entire playlists
+- 🎵 Multiple format options (video/audio)
+- 🔄 Automatic yt-dlp updates
+- 🎨 Beautiful CLI interface with progress tracking
+- 📁 Custom download directory support
+- 🌐 Geo-bypass support
+- 🎯 Format selection with detailed information
 
-## Installation
+## 🚀 Installation
 
-1. **Install Python**: Make sure Python 3.x is installed on your system.
-2. **Install dependencies**: Run the following command to install the required libraries:
-   ```bash
-   pip install yt-dlp rich pyfiglet 
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/yt-downloader-py.git
+cd yt-downloader-py
+```
 
-## Usage
-1. Run the program: Execute the yt_vidow.py file with the following command:
-   ```bash
-   python getvideoyt.py
+2. Install required dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-## Error Handling
-- Internet Connection: Ensure you have a stable internet connection.
-- Dependencies: Check that libraries like yt-dlp and ffmpeg are properly installed.
-- URL and Options: Verify that the URL and input options are correct.
-- Support: If issues persist, send a detailed error message to the author via email.
+## 📋 Requirements
 
+- Python 3.8 or higher
+- yt-dlp
+- rich
+- pyfiglet
+- ffmpeg (for audio conversion)
 
-# Installing FFmpeg using Chocolatey
+## 💻 Usage
 
-If you want to install `ffmpeg` using Chocolatey on Windows, follow these steps:
+1. Run the program:
+```bash
+python app.py
+```
 
-## 1. Install Chocolatey (if not already installed)
+2. Follow the menu options:
+   - Option 1: Download a single video
+   - Option 2: Download a playlist
+   - Option 3: About
+   - Option 4: Update yt-dlp
+   - Option 5: Exit
 
-1. Open Command Prompt as Administrator:
-   - Search for "cmd" in the Start Menu.
-   - Right-click on "Command Prompt" and select "Run as administrator".
+3. For video downloads:
+   - Enter the YouTube URL
+   - Select your preferred format
+   - Choose download location
+   - Enter custom filename (optional)
 
-2. Run the following command to install Chocolatey:
+## 🛠️ Configuration
 
-    ```bash
-    @powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-    ```
+The default download directory is set to `downloads/`. You can change this by modifying the `DEFAULT_DOWNLOAD_DIR` constant in `app.py`.
 
-3. After installation, restart Command Prompt or open a new Command Prompt window to ensure Chocolatey is recognized.
+## 📝 Changelog
 
-## 2. Install FFmpeg
+### Version 1.02 (05/08/2025)
+- Added yt-dlp auto-update feature
+- Improved error handling
+- Enhanced user interface
+- Added playlist download optimization
+- Added format selection improvements
+- Changed default download directory to 'downloads'
 
-1. Open Command Prompt as Administrator.
+## 🤝 Contributing
 
-2. Run the following command to install `ffmpeg`:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-    ```bash
-    choco install ffmpeg
-    ```
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-3. Wait for the installation to complete. Chocolatey will automatically download and install `ffmpeg` along with all necessary dependencies.
+## 📄 License
 
-## 3. Verify Installation
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-1. After installation, check if `ffmpeg` has been installed correctly by running the following command in Command Prompt:
+## 👨‍💻 Author
 
-    ```bash
-    ffmpeg -version
-    ```
+- **tanbay**
+- Email: dev.tanbaycu@gmail.com
 
-2. This command will display the version of `ffmpeg` if the installation was successful.
+## ⚠️ Disclaimer
 
-## End
+This tool is for educational purposes only. Please respect YouTube's terms of service and copyright laws when downloading content.
 
-- Make sure to open Command Prompt with Administrator privileges to perform the installation of Chocolatey and FFmpeg.
-- You can use Chocolatey to manage other software packages on Windows, making it easy to update and maintain the tools you need.
+## 🙏 Acknowledgments
 
-With this method, you can easily and quickly install `ffmpeg` on Windows.
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - The core downloader engine
+- [rich](https://github.com/Textualize/rich) - For beautiful terminal formatting
+- [pyfiglet](https://github.com/pwaller/pyfiglet) - For ASCII art text
 
+## 📞 Support
 
-## Disadvantage
+If you encounter any issues or have suggestions, please:
+1. Check the [Issues](https://github.com/yourusername/yt-downloader-py/issues) section
+2. Create a new issue if your problem isn't already listed
+3. Contact the author at dev.tanbaycu@gmail.com
 
-- if download playlist, it make happen with lists_format because any video have different format, pls keep link of the videos you like - download each for a better experience, or you want download all pls wait for format loading and choose id for you download.
+---
 
-## Hope
-- i ways for feedback of you with my code, i will hear opinions from you. gook luck
+⭐ Star this repository if you find it useful! 
