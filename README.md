@@ -87,7 +87,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-- **tanbay**
+- **tanbaycu**
 - Email: dev.tanbaycu@gmail.com
 
 ## ⚠️ Disclaimer
